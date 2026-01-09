@@ -1,0 +1,17 @@
+﻿# Build results
+bin/
+obj/
+
+# Visual Studio
+.vs/
+
+# User-specific files
+*.user
+*.suo
+
+# App settings (secrets)
+appsettings.json
+appsettings.*.json
+
+# Keep example file in repo
+!appsettings.example.json
