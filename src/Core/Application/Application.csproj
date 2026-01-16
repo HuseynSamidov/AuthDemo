@@ -9,8 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Abstractions\Interfaces\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Shared\" />
   </ItemGroup>
 
 </Project>
