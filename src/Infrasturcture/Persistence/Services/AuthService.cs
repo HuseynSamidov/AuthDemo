@@ -1,6 +1,25 @@
-﻿namespace Persistence.Services;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Persistence.Context;
 
-public class AuthService
+namespace Persistence.Services;
+
+public class AuthService : IAuthService
 {
-    public 
+    private readonly UserManager<AppUser> userManager;
+    private readonly SignInManager<AppUser> signInManager;
+    private readonly AppDbContext context;
+
+    public AuthService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, AppDbContext context)
+    {
+        this.userManager = userManager;
+        this.signInManager = signInManager;
+        this.context = context;
+    }
+    public Task<BaseResponse<TokenResponse>>Register(RegisterDTO dto)
+    {
+
+    }
+
+
 }
