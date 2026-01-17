@@ -27,7 +27,8 @@ public class AuthService : IAuthService
         var existUser = await userManager.FindByEmailAsync(dto.Email);
         if(existUser != null)
         {
-            return new BaseResponse<TokenResponse>("This email already registered", System.Net.HttpStatusCode.BadRequest);
+            return new BaseResponse<TokenResponse>("This email already registered",
+                System.Net.HttpStatusCode.BadRequest);
         }
 
         var newUser = new AppUser
@@ -46,7 +47,8 @@ public class AuthService : IAuthService
             {
                 errorMessage.Append(error.Description + ";");
             }
-            return new(errorMessage.ToString(),System.Net.HttpStatusCode.BadRequest);
+            return new(errorMessage.ToString(),
+                System.Net.HttpStatusCode.BadRequest);
         }
 
         if (string.IsNullOrWhiteSpace(newUser.Email))
@@ -55,11 +57,28 @@ public class AuthService : IAuthService
                 "Email cannot be empty. Registration failed.",
                 HttpStatusCode.BadRequest);
         }
-        return new BaseResponse<TokenResponse>("You registered successfully.", HttpStatusCode.Created);
+        return new BaseResponse<TokenResponse>("You registered successfully.",
+            HttpStatusCode.Created);
     }
-    public Task<BaseResponse<TokenResponse>> Login(LoginDTO dto)
+    public async Task<BaseResponse<TokenResponse>> Login(LoginDTO dto)
     {
-        throw new NotImplementedException();
+        var user= await userManager.FindByEmailAsync(dto.Email);
+
+        if(user == null)
+        {
+            return new BaseResponse<TokenResponse>("Email or password is wrong",
+                HttpStatusCode.Unauthorized);
+        }
+        var result = await signInManager.CheckPasswordSignInAsync(user, dto.Password, true);
+
+
+        bool isUserLockOut = await userManager.IsLockedOutAsync(user);
+        if (isUserLockOut)
+        {
+            return new BaseResponse<TokenResponse>("User is temporary blocked. Try again later.",
+                HttpStatusCode.Forbidden);
+        }
+
     }
    
 }
